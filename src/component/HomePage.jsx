@@ -24,7 +24,7 @@ function Homepage() {
     },
     {
       title: "Video and virtual dates",
-      text: "If you can’t meet in person yet, you can send a video call invite directly in the app.",
+      text: "If you can't meet in person yet, you can send a video call invite directly in the app.",
     },
     {
       title: "Community meetup section",
@@ -45,27 +45,27 @@ function Homepage() {
 
   const stories = [
     {
-      img: "/photo_2025-08-11_16-17-00.jpg",
+      video: "/video_2025-08-12_15-13-26.mp4",
       title: "Instant Dates",
       text: `Every request is a date request, you either accept and meet or move on.`,
     },
     {
-      img: "/photo_2025-08-11_16-17-01 (2).jpg",
+      video: "/video_2025-08-12_15-13-42.mp4",
       title: "Weekly event",
       text: `From beach hangouts to karaoke nights, woomeout brings users together in fun, safe environments.`,
     },
     {
-      img: "/photo_2025-08-11_16-17-01 (3).jpg",
+      video: "/video_2025-08-12_15-13-52.mp4",
       title: "Video and virtual dates",
       text: `If you can't meet in person yet, you can send a video call invite directly in the app.`,
     },
     {
-      img: "/photo_2025-08-11_16-17-01.jpg",
+      video: "/video_2025-08-12_15-14-02.mp4",
       title: "Community meetup section",
       text: `A space where users can join upcoming hangouts, post outfits and get noticed by potential dates.`,
     },
     {
-      img: "/photo_2025-08-11_16-17-02 (2).jpg",
+      video: "/video_2025-08-12_15-14-12.mp4",
       title: "Get gifted",
       text: `You can also make money from the app by receiving gifts from users.`,
     },
@@ -208,12 +208,13 @@ function Homepage() {
               s.text.length > 120 ? s.text.slice(0, 120).trim() + "..." : s.text;
             return (
               <article key={idx} className="bg-transparent">
-                <img
-                  src={s.img}
-                  alt={s.title}
+                <video 
+                  src={s.video}
                   className="mb-4 w-full h-60 object-cover rounded-sm brightness-100"
-                  onError={handleImageError}
-                  onLoad={() => console.log(`Story image loaded: ${s.img}`)}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                 />
                 <h3 className="text-xl font-bold">{s.title}</h3>
                 <p className="text-sm mt-2 leading-relaxed">
