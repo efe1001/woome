@@ -271,7 +271,7 @@ function Homepage() {
               <a href="#" className="hover:underline"> Privacy Settings</a>
             </div>
             <div className="text-center md:text-right">
-              © 2025 Tinder LLC, All Rights Reserved.
+              © 2025 Woome LLC, All Rights Reserved.
             </div>
           </div>
         </div>
