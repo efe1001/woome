@@ -16,6 +16,7 @@ function Homepage() {
   const [longTextExpanded, setLongTextExpanded] = useState(false);
   const videoRefs = useRef([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(null);
 
   // Hero items to slide one after another
   const heroItems = [
@@ -94,6 +95,16 @@ function Homepage() {
 
   const toggleStory = (i) => {
     setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
+  };
+
+  const handleVideoPlay = (index) => {
+    // Pause all other videos when one is played
+    videoRefs.current.forEach((video, i) => {
+      if (i !== index && video) {
+        video.pause();
+      }
+    });
+    setVideoPlaying(index);
   };
 
   const titleVariants = {
@@ -193,7 +204,6 @@ function Homepage() {
             </ul>
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-lg font-bold">Language</button>
             <a
               href={downloadLink}
               target="_blank"
@@ -218,7 +228,7 @@ function Homepage() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="text-7xl font-extrabold drop-shadow-lg"
+                  className="text-5xl md:text-7xl font-extrabold drop-shadow-lg"
                 >
                   {heroItems[currentIndex % heroItems.length].title}
                 </motion.h1>
@@ -227,7 +237,7 @@ function Homepage() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="text-xl font-normal max-w-2xl px-4 mt-4 leading-relaxed"
+                  className="text-lg md:text-xl font-normal max-w-2xl px-4 mt-4 leading-relaxed"
                 >
                   {heroItems[currentIndex % heroItems.length].text}
                 </motion.p>
@@ -256,12 +266,37 @@ function Homepage() {
               s.text.length > 120 ? s.text.slice(0, 120).trim() + "..." : s.text;
             return (
               <article key={idx} className="bg-transparent">
-                <video 
-                  ref={el => videoRefs.current[idx] = el}
-                  src={s.video}
-                  className="mb-4 w-full h-60 object-cover rounded-sm brightness-125 contrast-110 saturate-125"
-                  controls
-                />
+                <div className="relative">
+                  <video 
+                    ref={el => videoRefs.current[idx] = el}
+                    src={s.video}
+                    className="mb-4 w-full h-60 object-cover rounded-sm"
+                    controls
+                    playsInline
+                    autoPlay={false}
+                    preload="metadata"
+                    onClick={() => handleVideoPlay(idx)}
+                    onPlay={() => handleVideoPlay(idx)}
+                    style={{
+                      backgroundColor: '#000',
+                      backgroundImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7))'
+                    }}
+                  />
+                  {videoPlaying !== idx && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 24 24" 
+                          fill="white" 
+                          className="w-8 h-8 ml-1"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <h3 className="text-xl font-bold">{s.title}</h3>
                 <p className="text-sm mt-2 leading-relaxed">
                   {isExpanded ? s.text : preview}
