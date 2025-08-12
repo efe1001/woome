@@ -241,9 +241,9 @@ function Homepage() {
                 rel="noreferrer"
                 className="mt-8 px-8 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
               >
-                Click to create
+                Click to join
               </a>
-              <p className="mt-2 text-sm font-normal">To join our whatsapp community</p>
+              <p className="mt-2 text-sm font-normal">Our whatsapp community</p>
             </div>
           </header>
 
