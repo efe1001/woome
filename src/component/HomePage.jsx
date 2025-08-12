@@ -187,8 +187,9 @@ function Homepage() {
             </AnimatePresence>
           </div>
 
+          {/* Edit the link or text of this button here: Change 'href' or the button text */}
           <a
-            href={downloadLink}
+            href="https://chat.whatsapp.com/G2QwxnlzOh9B2EVhnb7JBn"
             target="_blank"
             rel="noreferrer"
             className="mt-8 px-8 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
