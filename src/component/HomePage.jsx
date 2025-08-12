@@ -175,7 +175,7 @@ function Homepage() {
             </ul>
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-lg font-bold">Language</button>
+            
             <a
               href={downloadLink}
               target="_blank"
