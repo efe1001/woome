@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FaInstagram, FaYoutube, FaTwitter, FaFacebookF } from "react-icons/fa";
+import { FaInstagram, FaTwitter } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,7 +16,7 @@ function Homepage() {
   const [longTextExpanded, setLongTextExpanded] = useState(false);
   const videoRefs = useRef([]);
 
-  // Hero items to slide one after another
+  // Hero items with equal timing
   const heroItems = [
     {
       title: "Instant Dates",
@@ -40,19 +40,11 @@ function Homepage() {
     },
   ];
 
-  // Background image cycling effect
-  useEffect(() => {
-    const id = setInterval(() => {
-      setCurrentIndex((p) => (p + 1) % backgroundImages.length);
-    }, 5000); // Change image every 5 seconds
-    return () => clearInterval(id);
-  }, [backgroundImages.length]);
-
-  // Hero text cycling effect
+  // Synchronized effects - both change every 5 seconds
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentIndex((p) => (p + 1) % heroItems.length);
-    }, 6000);
+    }, 5000); // Changed to 5000ms (5 seconds) for all items
     return () => clearInterval(id);
   }, [heroItems.length]);
 
@@ -84,25 +76,50 @@ function Homepage() {
     },
   ];
 
-  const longParagraphs = [
-    `Single people, listen up: If you're looking for love, want to start dating, or just keep it casual, you need to be on Tinder. With over 55 billion matches made, it's the place to be to meet your next best match. Let's be real, the dating landscape looks very different today, as most people are meeting online. With Tinder, the world's most popular free dating app, you have millions of other single people at your fingertips and they're all ready to meet someone like you. Whether you're straight or in the LGBTQIA community, Tinder's here to bring you all the sparks.`,
-    `There really is something for everyone on Tinder. Want to get into a relationship? You got it. Trying to find some new friends? Say no more. New kid on campus and looking to make the most of your college experience? Tinder U's got you covered. Tinder isn't your average dating site — it's the most diverse dating app, where adults of all backgrounds and experiences are invited to make connections, memories, and everything in between.`,
-  ];
-
   const toggleStory = (i) => {
     setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
   };
 
+  // Adjusted animation variants for synchronized timing
   const titleVariants = {
     initial: { x: "100%", opacity: 0 },
-    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-    exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
+    animate: { 
+      x: 0, 
+      opacity: 1, 
+      transition: { 
+        duration: 1, 
+        ease: "easeOut" 
+      } 
+    },
+    exit: { 
+      x: "-100%", 
+      opacity: 0, 
+      transition: { 
+        duration: 1, 
+        ease: "easeIn" 
+      } 
+    },
   };
 
   const textVariants = {
     initial: { x: "100%", opacity: 0 },
-    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut", delay: 0.5 } },
-    exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
+    animate: { 
+      x: 0, 
+      opacity: 1, 
+      transition: { 
+        duration: 1, 
+        ease: "easeOut",
+        delay: 0.3 
+      } 
+    },
+    exit: { 
+      x: "-100%", 
+      opacity: 0, 
+      transition: { 
+        duration: 1, 
+        ease: "easeIn" 
+      } 
+    },
   };
 
   const handleImageError = (e) => {
@@ -117,7 +134,7 @@ function Homepage() {
         <div className="absolute inset-0">
           <AnimatePresence mode="wait">
             {backgroundImages.map((src, i) => (
-              currentIndex === i && (
+              currentIndex % backgroundImages.length === i && (
                 <motion.img
                   key={src}
                   src={src}
@@ -139,11 +156,10 @@ function Homepage() {
         <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 text-white">
           <div className="flex items-center gap-6">
             <img
-              src="/Woome logo Gradient.png"
+              src="/photo_2025-08-12_16-21-24.jpg"
               alt="Woomeout Logo"
               className="h-16 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
               onError={handleImageError}
-              onLoad={() => console.log("Logo loaded successfully")}
             />
             <ul className="hidden md:flex gap-6">
               <li>
@@ -171,7 +187,7 @@ function Homepage() {
           </div>
         </nav>
 
-        {/* HERO text */}
+        {/* HERO text - now synchronized with background */}
         <div className="relative z-20 min-h-screen flex flex-col items-center justify-center text-center px-6">
           <div className="mt-12 flex flex-col items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
@@ -186,7 +202,7 @@ function Homepage() {
                   exit="exit"
                   className="text-7xl font-extrabold drop-shadow-lg"
                 >
-                  {heroItems[currentIndex].title}
+                  {heroItems[currentIndex % heroItems.length].title}
                 </motion.h1>
                 <motion.p
                   variants={textVariants}
@@ -195,7 +211,7 @@ function Homepage() {
                   exit="exit"
                   className="text-xl font-normal max-w-2xl px-4 mt-4 leading-relaxed"
                 >
-                  {heroItems[currentIndex].text}
+                  {heroItems[currentIndex % heroItems.length].text}
                 </motion.p>
               </motion.div>
             </AnimatePresence>
@@ -207,9 +223,8 @@ function Homepage() {
             rel="noreferrer"
             className="mt-8 px-8 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
           >
-            Click to create
+            Create account
           </a>
-          <p className="mt-2 text-sm font-normal">To join our whatsapp community</p>
         </div>
       </header>
 
@@ -249,17 +264,20 @@ function Homepage() {
       {/* ===== FOOTER ===== */}
       <footer className="bg-[#111] text-gray-300">
         <div className="max-w-7xl mx-auto px-4 py-10">
-          <div className="grid grid-cols-1 gap-8 border-b border-gray-700 pb-8">
-            <div className="mx-auto">
-              <h4 className="font-bold text-white mb-3 text-center">Social</h4>
-              <div className="flex space-x-4 text-xl justify-center">
-                <a href="https://www.instagram.com/woomeout?igsh=MW4wY2Q1M2xhZDgzcw=="><FaInstagram /></a>
-                <a href="https://www.tiktok.com/@woomeout?_t=ZS-8yopAsQcTOJ&_r=1"><SiTiktok /></a>
-                <a href="https://x.com/woomeout"><FaTwitter /></a>
-              </div>
-            </div>
+          {/* Social Media Links */}
+          <div className="flex justify-center gap-6 mb-8">
+            <a href="https://www.instagram.com/woomeout?igsh=MW4wY2Q1M2xhZDgzcw==" target="_blank" rel="noopener noreferrer" className="text-2xl hover:text-pink-500 transition-colors">
+              <FaInstagram />
+            </a>
+            <a href="https://www.tiktok.com/@woomeout?_t=ZS-8yopAsQcTOJ&_r=1" target="_blank" rel="noopener noreferrer" className="text-2xl hover:text-pink-500 transition-colors">
+              <SiTiktok />
+            </a>
+            <a href="https://x.com/woomeout" target="_blank" rel="noopener noreferrer" className="text-2xl hover:text-pink-500 transition-colors">
+              <FaTwitter />
+            </a>
           </div>
 
+          {/* Get the app */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-8 gap-4">
             <h4 className="font-bold text-white">Get the app!</h4>
             <div className="flex items-center gap-4">
@@ -282,47 +300,8 @@ function Homepage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-700 mt-8 pt-6">
-            <div className="prose max-w-none prose-invert text-gray-300">
-              {longTextExpanded ? (
-                <>
-                  <p>{longParagraphs[0]}</p>
-                  <p>{longParagraphs[1]}</p>
-                  <button
-                    onClick={() => setLongTextExpanded(false)}
-                    className="text-pink-500 mt-2"
-                  >
-                    Show less
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p>
-                    {longParagraphs[0].slice(0, 300).trim()}
-                    {longParagraphs[0].length > 300 && "..."}
-                  </p>
-                  <button
-                    onClick={() => setLongTextExpanded(true)}
-                    className="text-pink-500 mt-2"
-                  >
-                    Read more
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between items-center mt-6 text-gray-400 text-xs gap-4">
-            <div className="space-x-3 text-center md:text-left">
-              <a href="#" className="hover:underline">FAQ</a> /
-              <a href="#" className="hover:underline"> Safety Tips</a> /
-              <a href="#" className="hover:underline"> Terms</a> /
-              <a href="#" className="hover:underline"> Cookie Policy</a> /
-              <a href="#" className="hover:underline"> Privacy Settings</a>
-            </div>
-            <div className="text-center md:text-right">
-              © 2025 Woome LLC, All Rights Reserved.
-            </div>
+          <div className="flex justify-center items-center mt-6 text-gray-400 text-xs">
+            © 2025 Woome LLC, All Rights Reserved.
           </div>
         </div>
       </footer>
