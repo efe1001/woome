@@ -260,6 +260,10 @@ function Homepage() {
                       ref={el => videoRefs.current[idx] = el}
                       src={s.video}
                       className="mb-4 w-full h-60 object-cover rounded-sm brightness-100"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
                       controls
                     />
                     <h3 className="text-xl font-bold">{s.title}</h3>
