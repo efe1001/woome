@@ -1,4 +1,3 @@
-// src/Homepage.jsx
 import React, { useEffect, useState } from "react";
 import { FaInstagram, FaYoutube, FaTwitter, FaFacebookF } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
@@ -12,27 +11,42 @@ function Homepage() {
   const [expandedStories, setExpandedStories] = useState({});
   const [longTextExpanded, setLongTextExpanded] = useState(false);
 
-  // Hero subtext items to slide one after another
-  const heroTexts = [
-    "Instant Dates — Every request is a date request, you either accept and meet or move on.",
-    "Weekly event — From beach hangouts to karaoke nights, woomeout brings users together in fun, safe environments.",
-    "Video and virtual dates — If you can’t meet in person yet, you can send a video call invite directly in the app.",
-    "Community meetup section — A space where users can join upcoming hangouts, post outfits and get noticed by potential dates.",
-    "Get gifted — You can also make money from the app by receiving gifts from users.",
+  // Hero items to slide one after another
+  const heroItems = [
+    {
+      title: "Instant Dates",
+      text: "Every request is a date request, you either accept and meet or move on.",
+    },
+    {
+      title: "Weekly event",
+      text: "From beach hangouts to karaoke nights, woomeout brings users together in fun, safe environments.",
+    },
+    {
+      title: "Video and virtual dates",
+      text: "If you can’t meet in person yet, you can send a video call invite directly in the app.",
+    },
+    {
+      title: "Community meetup section",
+      text: "A space where users can join upcoming hangouts, post outfits and get noticed by potential dates.",
+    },
+    {
+      title: "Get gifted",
+      text: "You can also make money from the app by receiving gifts from users.",
+    },
   ];
 
   useEffect(() => {
     const id = setInterval(() => {
-      setCurrentIndex((p) => (p + 1) % heroTexts.length);
-    }, 4000);
+      setCurrentIndex((p) => (p + 1) % heroItems.length);
+    }, 6000); // Increased interval to accommodate sequential animations
     return () => clearInterval(id);
-  }, [heroTexts.length]);
+  }, [heroItems.length]);
 
   const stories = [
     {
       img: "/photo_2025-08-11_16-17-00.jpg",
       title: "Instant Dates",
-      text: `Every request is a date request,  you either accept and meet or move on.`,
+      text: `Every request is a date request, you either accept and meet or move on.`,
     },
     {
       img: "/photo_2025-08-11_16-17-01 (2).jpg",
@@ -63,6 +77,20 @@ function Homepage() {
 
   const toggleStory = (i) => {
     setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
+  };
+
+  // Animation variants for title
+  const titleVariants = {
+    initial: { x: "100%", opacity: 0 },
+    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
+    exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
+  };
+
+  // Animation variants for text
+  const textVariants = {
+    initial: { x: "100%", opacity: 0 },
+    animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut", delay: 0.5 } },
+    exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
   };
 
   return (
@@ -113,25 +141,32 @@ function Homepage() {
 
         {/* HERO text */}
         <div className="relative z-20 min-h-screen flex flex-col items-center justify-center text-center px-6">
-          {/* Fixed Title */}
-          <h1 className="text-[96px] leading-[0.9] font-extrabold drop-shadow-lg">
-            Swipe <br className="sm:hidden" />
-            Right<span className="align-super text-xl">®</span>
-          </h1>
-
-          {/* Sliding Subtext */}
-          <div className="mt-6 h-20 flex items-center justify-center overflow-hidden">
+          {/* Sliding Title and Subtext */}
+          <div className="mt-12 flex flex-col items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
-              <motion.p
+              <motion.div
                 key={currentIndex}
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -50, opacity: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-xl font-bold max-w-2xl px-4"
+                className="flex flex-col items-center"
               >
-                {heroTexts[currentIndex]}
-              </motion.p>
+                <motion.h1
+                  variants={titleVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="text-[96px] leading-[0.9] font-extrabold drop-shadow-lg"
+                >
+                  {heroItems[currentIndex].title}
+                </motion.h1>
+                <motion.p
+                  variants={textVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="text-xl font-bold max-w-2xl px-4 mt-4"
+                >
+                  {heroItems[currentIndex].text}
+                </motion.p>
+              </motion.div>
             </AnimatePresence>
           </div>
 
