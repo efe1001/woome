@@ -11,36 +11,22 @@ function Homepage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedStories, setExpandedStories] = useState({});
   const [longTextExpanded, setLongTextExpanded] = useState(false);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
-  // Hero sliding text list
+  // Hero subtext items to slide one after another
   const heroTexts = [
-    { title: "Instant Dates", text: "Every request is a date request, you either accept and meet or move on." },
-    { title: "Weekly event", text: "From beach hangouts to karaoke nights, woomeout brings users together in fun, safe environments." },
-    { title: "Video and virtual dates", text: "If you can’t meet in person yet, you can send a video call invite directly in the app." },
-    { title: "Community meetup section", text: "A space where users can join upcoming hangouts, post outfits and get noticed by potential dates." },
-    { title: "Get gifted", text: "You can also make money from the app by receiving gifts from users." }
+    "Instant Dates — Every request is a date request, you either accept and meet or move on.",
+    "Weekly event — From beach hangouts to karaoke nights, woomeout brings users together in fun, safe environments.",
+    "Video and virtual dates — If you can’t meet in person yet, you can send a video call invite directly in the app.",
+    "Community meetup section — A space where users can join upcoming hangouts, post outfits and get noticed by potential dates.",
+    "Get gifted — You can also make money from the app by receiving gifts from users.",
   ];
 
-  // Image slider
   useEffect(() => {
     const id = setInterval(() => {
-      setCurrentIndex((p) => (p + 1) % images.length);
+      setCurrentIndex((p) => (p + 1) % heroTexts.length);
     }, 4000);
     return () => clearInterval(id);
-  }, [images.length]);
-
-  // Text slider
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setCurrentTextIndex((p) => (p + 1) % heroTexts.length);
-    }, 4000);
-    return () => clearInterval(textInterval);
-  }, []);
-
-  const toggleStory = (i) => {
-    setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
-  };
+  }, [heroTexts.length]);
 
   const stories = [
     {
@@ -75,19 +61,22 @@ function Homepage() {
     `There really is something for everyone on Tinder. Want to get into a relationship? You got it. Trying to find some new friends? Say no more. New kid on campus and looking to make the most of your college experience? Tinder U's got you covered. Tinder isn't your average dating site — it's the most diverse dating app, where adults of all backgrounds and experiences are invited to make connections, memories, and everything in between.`,
   ];
 
+  const toggleStory = (i) => {
+    setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
+  };
+
   return (
     <div className="bg-black text-white">
       {/* ===== HERO / SLIDER ===== */}
       <header className="relative min-h-screen overflow-hidden">
-        {/* Background images */}
-        <div
-          className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
+        <div className="absolute inset-0">
           {images.map((src, i) => (
-            <div key={i} className="flex-shrink-0 w-full h-screen">
-              <img src={src} alt={`slide-${i}`} className="w-full h-full object-cover" />
-            </div>
+            <img
+              key={i}
+              src={src}
+              alt={`slide-${i}`}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           ))}
         </div>
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -98,7 +87,12 @@ function Homepage() {
             <img src="/logo.webp" alt="logo" className="h-10 object-contain" />
             <ul className="hidden md:flex gap-6">
               <li>
-                <a href={downloadLink} target="_blank" rel="noreferrer" className="hover:underline text-lg font-bold">
+                <a
+                  href={downloadLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline text-lg font-bold"
+                >
                   Download
                 </a>
               </li>
@@ -106,23 +100,41 @@ function Homepage() {
           </div>
           <div className="flex items-center gap-4">
             <button className="text-lg font-bold">Language</button>
-            <a href={downloadLink} target="_blank" rel="noreferrer" className="bg-white text-black rounded-full px-4 py-1 text-lg font-bold">
+            <a
+              href={downloadLink}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-white text-black rounded-full px-4 py-1 text-lg font-bold"
+            >
               Log in
             </a>
           </div>
         </nav>
 
         {/* HERO text */}
-        <motion.div
-          className="relative z-20 min-h-screen flex flex-col items-center justify-center text-center px-6"
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
+        <div className="relative z-20 min-h-screen flex flex-col items-center justify-center text-center px-6">
+          {/* Fixed Title */}
           <h1 className="text-[96px] leading-[0.9] font-extrabold drop-shadow-lg">
             Swipe <br className="sm:hidden" />
             Right<span className="align-super text-xl">®</span>
           </h1>
+
+          {/* Sliding Subtext */}
+          <div className="mt-6 h-20 flex items-center justify-center overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={currentIndex}
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -50, opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-xl font-bold max-w-2xl px-4"
+              >
+                {heroTexts[currentIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
           <a
             href={downloadLink}
             target="_blank"
@@ -131,23 +143,7 @@ function Homepage() {
           >
             Create account
           </a>
-
-          {/* Animated text slider */}
-          <div className="mt-10 max-w-xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTextIndex}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -20, opacity: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <h3 className="text-2xl font-bold">{heroTexts[currentTextIndex].title}</h3>
-                <p className="mt-2 text-lg text-gray-200">{heroTexts[currentTextIndex].text}</p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </motion.div>
+        </div>
       </header>
 
       {/* ===== STORIES SECTION ===== */}
@@ -155,10 +151,15 @@ function Homepage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-6">
           {stories.map((s, idx) => {
             const isExpanded = !!expandedStories[idx];
-            const preview = s.text.length > 120 ? s.text.slice(0, 120).trim() + "..." : s.text;
+            const preview =
+              s.text.length > 120 ? s.text.slice(0, 120).trim() + "..." : s.text;
             return (
               <article key={idx} className="bg-transparent">
-                <img src={s.img} alt={s.title} className="mb-4 w-full h-60 object-cover rounded-sm" />
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="mb-4 w-full h-60 object-cover rounded-sm"
+                />
                 <h3 className="text-xl font-bold">{s.title}</h3>
                 <p className="text-sm mt-2 leading-relaxed">
                   {isExpanded ? s.text : preview}
@@ -236,7 +237,10 @@ function Homepage() {
                 <>
                   <p>{longParagraphs[0]}</p>
                   <p>{longParagraphs[1]}</p>
-                  <button onClick={() => setLongTextExpanded(false)} className="text-pink-500 mt-2">
+                  <button
+                    onClick={() => setLongTextExpanded(false)}
+                    className="text-pink-500 mt-2"
+                  >
                     Show less
                   </button>
                 </>
@@ -246,7 +250,10 @@ function Homepage() {
                     {longParagraphs[0].slice(0, 300).trim()}
                     {longParagraphs[0].length > 300 && "..."}
                   </p>
-                  <button onClick={() => setLongTextExpanded(true)} className="text-pink-500 mt-2">
+                  <button
+                    onClick={() => setLongTextExpanded(true)}
+                    className="text-pink-500 mt-2"
+                  >
                     Read more
                   </button>
                 </>
