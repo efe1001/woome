@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FaInstagram, FaYoutube, FaTwitter, FaFacebookF } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,9 +10,9 @@ function Homepage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedStories, setExpandedStories] = useState({});
   const [longTextExpanded, setLongTextExpanded] = useState(false);
+  const videoRefs = useRef([]);
 
   // Hero items to slide one after another
-  // Edit titles and texts here to change content
   const heroItems = [
     {
       title: "Instant Dates",
@@ -39,7 +39,7 @@ function Homepage() {
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentIndex((p) => (p + 1) % heroItems.length);
-    }, 6000); // Increased interval to accommodate sequential animations
+    }, 6000);
     return () => clearInterval(id);
   }, [heroItems.length]);
 
@@ -80,24 +80,21 @@ function Homepage() {
     setExpandedStories((prev) => ({ ...prev, [i]: !prev[i] }));
   };
 
-  // Animation variants for title
   const titleVariants = {
     initial: { x: "100%", opacity: 0 },
     animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
     exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
   };
 
-  // Animation variants for text
   const textVariants = {
     initial: { x: "100%", opacity: 0 },
     animate: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut", delay: 0.5 } },
     exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
   };
 
-  // Handle image loading errors
   const handleImageError = (e) => {
     console.warn(`Image failed to load: ${e.target.src}`);
-    e.target.src = "/placeholder.png"; // Replace with a valid fallback image path or URL
+    e.target.src = "/placeholder.png";
   };
 
   return (
@@ -156,14 +153,12 @@ function Homepage() {
 
         {/* HERO text */}
         <div className="relative z-20 min-h-screen flex flex-col items-center justify-center text-center px-6">
-          {/* Sliding Title and Subtext */}
           <div className="mt-12 flex flex-col items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
                 className="flex flex-col items-center"
               >
-                {/* Edit title size here: Change 'text-7xl' to 'text-6xl', 'text-8xl', etc. */}
                 <motion.h1
                   variants={titleVariants}
                   initial="initial"
@@ -173,7 +168,6 @@ function Homepage() {
                 >
                   {heroItems[currentIndex].title}
                 </motion.h1>
-                {/* Edit text style here: Change 'font-normal text-xl' to 'font-medium', 'text-lg', etc. */}
                 <motion.p
                   variants={textVariants}
                   initial="initial"
@@ -187,7 +181,6 @@ function Homepage() {
             </AnimatePresence>
           </div>
 
-          {/* Edit the link or text of this button here: Change 'href' or the button text */}
           <a
             href="https://chat.whatsapp.com/G2QwxnlzOh9B2EVhnb7JBn"
             target="_blank"
@@ -209,12 +202,10 @@ function Homepage() {
             return (
               <article key={idx} className="bg-transparent">
                 <video 
+                  ref={el => videoRefs.current[idx] = el}
                   src={s.video}
                   className="mb-4 w-full h-60 object-cover rounded-sm brightness-100"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+                  controls
                 />
                 <h3 className="text-xl font-bold">{s.title}</h3>
                 <p className="text-sm mt-2 leading-relaxed">
@@ -237,7 +228,6 @@ function Homepage() {
       {/* ===== FOOTER ===== */}
       <footer className="bg-[#111] text-gray-300">
         <div className="max-w-7xl mx-auto px-4 py-10">
-          {/* Top grid */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8">
             <div>
               <h4 className="font-bold text-white mb-3">Legal</h4>
@@ -277,7 +267,6 @@ function Homepage() {
             </div>
           </div>
 
-          {/* Get the app */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-8 gap-4">
             <h4 className="font-bold text-white">Get the app!</h4>
             <div className="flex items-center gap-4">
@@ -302,7 +291,6 @@ function Homepage() {
             </div>
           </div>
 
-          {/* Long description */}
           <div className="border-t border-gray-700 mt-8 pt-6">
             <div className="prose max-w-none prose-invert text-gray-300">
               {longTextExpanded ? (
@@ -333,7 +321,6 @@ function Homepage() {
             </div>
           </div>
 
-          {/* Bottom links */}
           <div className="flex flex-col md:flex-row justify-between items-center mt-6 text-gray-400 text-xs gap-4">
             <div className="space-x-3 text-center md:text-left">
               <a href="#" className="hover:underline">FAQ</a> /
