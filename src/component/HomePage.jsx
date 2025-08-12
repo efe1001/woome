@@ -153,7 +153,7 @@ function Homepage() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="text-[96px] leading-[0.9] font-extrabold drop-shadow-lg"
+                  className="text-5xl font-extrabold drop-shadow-lg"
                 >
                   {heroItems[currentIndex].title}
                 </motion.h1>
