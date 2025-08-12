@@ -4,7 +4,11 @@ import { SiTiktok } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Homepage() {
-  const images = ["/photo_2025-08-11_16-17-00.jpg"];
+  const backgroundImages = [
+    "/photo_2025-08-12_16-10-22.jpg",
+    "/photo_2025-08-12_16-10-23 (2).jpg",
+    "/photo_2025-08-12_16-10-23.jpg"
+  ];
   const downloadLink = "https://apps.apple.com/ng/app/woomeout/id6473001317";
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,6 +40,15 @@ function Homepage() {
     },
   ];
 
+  // Background image cycling effect
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentIndex((p) => (p + 1) % backgroundImages.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(id);
+  }, [backgroundImages.length]);
+
+  // Hero text cycling effect
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentIndex((p) => (p + 1) % heroItems.length);
@@ -102,16 +115,23 @@ function Homepage() {
       {/* ===== HERO / SLIDER ===== */}
       <header className="relative min-h-screen overflow-hidden">
         <div className="absolute inset-0">
-          {images.map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt={`Hero image ${i + 1}`}
-              className="absolute inset-0 w-full h-full object-cover brightness-75"
-              onError={handleImageError}
-              onLoad={() => console.log(`Hero image loaded: ${src}`)}
-            />
-          ))}
+          <AnimatePresence mode="wait">
+            {backgroundImages.map((src, i) => (
+              currentIndex === i && (
+                <motion.img
+                  key={src}
+                  src={src}
+                  alt={`Background ${i + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.7 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.5 }}
+                  onError={handleImageError}
+                />
+              )
+            ))}
+          </AnimatePresence>
         </div>
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 
@@ -119,7 +139,7 @@ function Homepage() {
         <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 text-white">
           <div className="flex items-center gap-6">
             <img
-              src="/logo.webp"
+              src="/Woome logo Gradient.png"
               alt="Woomeout Logo"
               className="h-16 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
               onError={handleImageError}
@@ -187,8 +207,9 @@ function Homepage() {
             rel="noreferrer"
             className="mt-8 px-8 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
           >
-            Create account
+            Click to create
           </a>
+          <p className="mt-2 text-sm font-normal">To join our whatsapp community</p>
         </div>
       </header>
 
@@ -228,42 +249,14 @@ function Homepage() {
       {/* ===== FOOTER ===== */}
       <footer className="bg-[#111] text-gray-300">
         <div className="max-w-7xl mx-auto px-4 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8">
-            <div>
-              <h4 className="font-bold text-white mb-3">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:underline">Privacy</a></li>
-                <li><a href="#" className="hover:underline">Consumer Health Data Privacy Policy</a></li>
-                <li><a href="#" className="hover:underline">Terms</a></li>
-                <li><a href="#" className="hover:underline">Cookie Policy</a></li>
-                <li><a href="#" className="hover:underline">Intellectual Property</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-3">Careers</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:underline">Careers Portal</a></li>
-                <li><a href="#" className="hover:underline">Tech Blog</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-3">Social</h4>
-              <div className="flex space-x-4 text-xl">
-                <a href="#"><FaInstagram /></a>
-                <a href="#"><SiTiktok /></a>
-                <a href="#"><FaYoutube /></a>
-                <a href="#"><FaTwitter /></a>
-                <a href="#"><FaFacebookF /></a>
+          <div className="grid grid-cols-1 gap-8 border-b border-gray-700 pb-8">
+            <div className="mx-auto">
+              <h4 className="font-bold text-white mb-3 text-center">Social</h4>
+              <div className="flex space-x-4 text-xl justify-center">
+                <a href="https://www.instagram.com/woomeout?igsh=MW4wY2Q1M2xhZDgzcw=="><FaInstagram /></a>
+                <a href="https://www.tiktok.com/@woomeout?_t=ZS-8yopAsQcTOJ&_r=1"><SiTiktok /></a>
+                <a href="https://x.com/woomeout"><FaTwitter /></a>
               </div>
-            </div>
-            <div className="md:col-span-2">
-              <h4 className="font-bold text-white mb-3">FAQ</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:underline">Destinations</a></li>
-                <li><a href="#" className="hover:underline">Press Room</a></li>
-                <li><a href="#" className="hover:underline">Contact</a></li>
-                <li><a href="#" className="hover:underline">Promo Code</a></li>
-              </ul>
             </div>
           </div>
 
@@ -276,7 +269,6 @@ function Homepage() {
                   alt="Download on the App Store"
                   className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
                   onError={handleImageError}
-                  onLoad={() => console.log("App Store image loaded successfully")}
                 />
               </a>
               <a href={downloadLink} target="_blank" rel="noreferrer">
@@ -285,7 +277,6 @@ function Homepage() {
                   alt="Get it on Google Play"
                   className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
                   onError={handleImageError}
-                  onLoad={() => console.log("Google Play image loaded successfully")}
                 />
               </a>
             </div>
