@@ -12,6 +12,7 @@ function Homepage() {
   const [longTextExpanded, setLongTextExpanded] = useState(false);
 
   // Hero items to slide one after another
+  // Edit titles and texts here to change content
   const heroItems = [
     {
       title: "Instant Dates",
@@ -71,8 +72,8 @@ function Homepage() {
   ];
 
   const longParagraphs = [
-    `Single people, listen up: If you're looking for love, want to start dating, or just keep it casual, you need to be on woome. With over 55 billion matches made, it's the place to be to meet your next best match. Let's be real, the dating landscape looks very different today, as most people are meeting online. With woome, the world's most popular free dating app, you have millions of other single people at your fingertips and they're all ready to meet someone like you. Whether you're straight or in the LGBTQIA community, woome's here to bring you all the sparks.`,
-    `There really is something for everyone on woome. Want to get into a relationship? You got it. Trying to find some new friends? Say no more. New kid on campus and looking to make the most of your college experience? woome U's got you covered. woome isn't your average dating site — it's the most diverse dating app, where adults of all backgrounds and experiences are invited to make connections, memories, and everything in between.`,
+    `Single people, listen up: If you're looking for love, want to start dating, or just keep it casual, you need to be on Tinder. With over 55 billion matches made, it's the place to be to meet your next best match. Let's be real, the dating landscape looks very different today, as most people are meeting online. With Tinder, the world's most popular free dating app, you have millions of other single people at your fingertips and they're all ready to meet someone like you. Whether you're straight or in the LGBTQIA community, Tinder's here to bring you all the sparks.`,
+    `There really is something for everyone on Tinder. Want to get into a relationship? You got it. Trying to find some new friends? Say no more. New kid on campus and looking to make the most of your college experience? Tinder U's got you covered. Tinder isn't your average dating site — it's the most diverse dating app, where adults of all backgrounds and experiences are invited to make connections, memories, and everything in between.`,
   ];
 
   const toggleStory = (i) => {
@@ -93,6 +94,12 @@ function Homepage() {
     exit: { x: "-100%", opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
   };
 
+  // Handle image loading errors
+  const handleImageError = (e) => {
+    console.warn(`Image failed to load: ${e.target.src}`);
+    e.target.src = "/placeholder.png"; // Replace with a valid fallback image path or URL
+  };
+
   return (
     <div className="bg-black text-white">
       {/* ===== HERO / SLIDER ===== */}
@@ -102,8 +109,10 @@ function Homepage() {
             <img
               key={i}
               src={src}
-              alt={`slide-${i}`}
-              className="absolute inset-0 w-full h-full object-cover"
+              alt={`Hero image ${i + 1}`}
+              className="absolute inset-0 w-full h-full object-cover brightness-75"
+              onError={handleImageError}
+              onLoad={() => console.log(`Hero image loaded: ${src}`)}
             />
           ))}
         </div>
@@ -112,7 +121,13 @@ function Homepage() {
         {/* NAV */}
         <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 text-white">
           <div className="flex items-center gap-6">
-            <img src="/logo.webp" alt="logo" className="h-10 object-contain" />
+            <img
+              src="/logo.webp"
+              alt="Woomeout Logo"
+              className="h-16 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
+              onError={handleImageError}
+              onLoad={() => console.log("Logo loaded successfully")}
+            />
             <ul className="hidden md:flex gap-6">
               <li>
                 <a
@@ -148,21 +163,23 @@ function Homepage() {
                 key={currentIndex}
                 className="flex flex-col items-center"
               >
+                {/* Edit title size here: Change 'text-7xl' to 'text-6xl', 'text-8xl', etc. */}
                 <motion.h1
                   variants={titleVariants}
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="text-5xl font-extrabold drop-shadow-lg"
+                  className="text-7xl font-extrabold drop-shadow-lg"
                 >
                   {heroItems[currentIndex].title}
                 </motion.h1>
+                {/* Edit text style here: Change 'font-normal text-xl' to 'font-medium', 'text-lg', etc. */}
                 <motion.p
                   variants={textVariants}
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="text-xl font-bold max-w-2xl px-4 mt-4"
+                  className="text-xl font-normal max-w-2xl px-4 mt-4 leading-relaxed"
                 >
                   {heroItems[currentIndex].text}
                 </motion.p>
@@ -193,7 +210,9 @@ function Homepage() {
                 <img
                   src={s.img}
                   alt={s.title}
-                  className="mb-4 w-full h-60 object-cover rounded-sm"
+                  className="mb-4 w-full h-60 object-cover rounded-sm brightness-100"
+                  onError={handleImageError}
+                  onLoad={() => console.log(`Story image loaded: ${s.img}`)}
                 />
                 <h3 className="text-xl font-bold">{s.title}</h3>
                 <p className="text-sm mt-2 leading-relaxed">
@@ -260,8 +279,24 @@ function Homepage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-8 gap-4">
             <h4 className="font-bold text-white">Get the app!</h4>
             <div className="flex items-center gap-4">
-              <img src="/appstore.png" alt="App Store" className="h-10" />
-              <img src="/googleplay.png" alt="Google Play" className="h-10" />
+              <a href={downloadLink} target="_blank" rel="noreferrer">
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2021/02/App-Store-Logo.png"
+                  alt="Download on the App Store"
+                  className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
+                  onError={handleImageError}
+                  onLoad={() => console.log("App Store image loaded successfully")}
+                />
+              </a>
+              <a href={downloadLink} target="_blank" rel="noreferrer">
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2020/12/Google-Play-icon-logo.png"
+                  alt="Get it on Google Play"
+                  className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
+                  onError={handleImageError}
+                  onLoad={() => console.log("Google Play image loaded successfully")}
+                />
+              </a>
             </div>
           </div>
 
