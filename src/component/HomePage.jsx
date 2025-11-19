@@ -241,15 +241,27 @@ Join weekly hangouts like beach days, karaoke nights, and game meetups — all d
             </AnimatePresence>
           </div>
 
-          <a
-            href="https://chat.whatsapp.com/G2QwxnlzOh9B2EVhnb7JBn"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 px-8 py-3 rounded-full text-lg font-semibold bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
-          >
-            Click to join
-          </a>
-          <p className="mt-2 text-sm font-normal">Our whatsapp community</p>
+          <div className="flex flex-col items-center mt-8">
+            <div className="flex items-center gap-4">
+              <a href={downloadLink} target="_blank" rel="noreferrer">
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2021/02/App-Store-Logo.png"
+                  alt="Download on the App Store"
+                  className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
+                  onError={handleImageError}
+                />
+              </a>
+              <a href={downloadLink} target="_blank" rel="noreferrer">
+                <img
+                  src="https://logos-world.net/wp-content/uploads/2020/12/Google-Play-icon-logo.png"
+                  alt="Get it on Google Play"
+                  className="h-12 w-auto max-w-[200px] object-contain brightness-125 contrast-100"
+                  onError={handleImageError}
+                />
+              </a>
+            </div>
+            <p className="mt-2 text-sm font-normal">Click to install</p>
+          </div>
           <motion.div
             className="mt-4 cursor-pointer"
             initial={{ y: 0 }}
