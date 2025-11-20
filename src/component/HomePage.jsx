@@ -242,6 +242,7 @@ Join weekly hangouts like beach days, karaoke nights, and game meetups — all d
           </div>
 
           <div className="flex flex-col items-center mt-8">
+            <p className="mb-2 text-sm font-normal">Click to install</p>
             <div className="flex items-center gap-4">
               <a href={downloadLink} target="_blank" rel="noreferrer">
                 <img
@@ -260,7 +261,6 @@ Join weekly hangouts like beach days, karaoke nights, and game meetups — all d
                 />
               </a>
             </div>
-            <p className="mt-2 text-sm font-normal">Click to install</p>
           </div>
           <motion.div
             className="mt-4 cursor-pointer"
